@@ -90,28 +90,8 @@ functions:
     handler: ./qiskit-grover
     image: quantumdev/qiskit-grover:latest
 
-  qiskit-grover-v3:
-    lang: qiskit
-    handler: ./qiskit-grover-v3
-    image: quantumdev/qiskit-grover-v3:latest
-
   qiskit-sample:
     lang: qiskit
     handler: ./qiskit-sample
     image: quantumdev/qiskit-sample:latest
-
-  qiskit-test:
-    lang: qiskit
-    handler: ./qiskit-test
-    image: quantumdev/qiskit-test:latest
-
-  qiskit-demo1:
-    lang: qiskit
-    handler: ./qiskit-demo1
-    image: quantumdev/qiskit-demo1:latest
-
-  qiskit-demo2:
-    lang: qiskit
-    handler: ./qiskit-demo2
-    image: quantumdev/qiskit-demo2:latest
 

@@ -1,1 +1,1 @@
-qiskit-demo2
+qiskit-sample
