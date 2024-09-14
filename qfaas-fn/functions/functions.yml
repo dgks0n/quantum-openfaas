@@ -110,3 +110,8 @@ functions:
     handler: ./qiskit-demo1
     image: quantumdev/qiskit-demo1:latest
 
+  qiskit-demo2:
+    lang: qiskit
+    handler: ./qiskit-demo2
+    image: quantumdev/qiskit-demo2:latest
+
