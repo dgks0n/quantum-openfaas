@@ -100,3 +100,8 @@ functions:
     handler: ./qiskit-sample
     image: quantumdev/qiskit-sample:latest
 
+  qiskit-test:
+    lang: qiskit
+    handler: ./qiskit-test
+    image: quantumdev/qiskit-test:latest
+
