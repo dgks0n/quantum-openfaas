@@ -1,6 +1,7 @@
 # Import logging configuration
-from logging.config import dictConfig
 import logging
+from logging.config import dictConfig
+
 from pydantic import BaseModel
 
 
@@ -31,6 +32,7 @@ class LogConfig(BaseModel):
     loggers = {
         "qfaascore": {"handlers": ["default"], "level": LOG_LEVEL},
     }
+
 
 # Config logging
 dictConfig(LogConfig().dict())

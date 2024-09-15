@@ -1,8 +1,8 @@
 from enum import Enum
+
 from fastapi import APIRouter, Body, Depends
 from fastapi.encoders import jsonable_encoder
-from sympy import false
-from qfaas.dependency.auth import get_current_active_user
+
 from qfaas.database.dbProvider import (
     add_provider,
     update_provider,
@@ -10,17 +10,17 @@ from qfaas.database.dbProvider import (
     retrieve_provider,
     retrieve_providers,
 )
+from qfaas.dependency.auth import get_current_active_user
 from qfaas.models.provider import (
     ErrorResponseModel,
     ResponseModel,
     CreateProviderModel,
     UpdateProviderModel,
 )
-from qfaas.utils.logger import logger
-from qfaas.providers.ibmq import get_IBMQ_hubs
 from qfaas.providers.braketsw import initialize_SWProvider
-
+from qfaas.providers.ibmq import get_IBMQ_hubs
 from qfaas.routes.backendRoute import fetch_backend
+from qfaas.utils.logger import logger
 
 router = APIRouter()
 
@@ -32,8 +32,8 @@ class ProviderName(str, Enum):
 
 @router.post("/", response_description="Provider data added into the database")
 async def add_provider_data(
-    provider: CreateProviderModel = Body(...),
-    currentUserUsername: str = Depends(get_current_active_user),
+        provider: CreateProviderModel = Body(...),
+        currentUserUsername: str = Depends(get_current_active_user),
 ):
     """Add new Provider data to the database
 
@@ -103,8 +103,8 @@ async def get_providers(currentUserUsername: str = Depends(get_current_active_us
 
 @router.get("/{providerName}", response_description="Provider data retrieved")
 async def get_provider_data(
-    providerName: ProviderName,
-    currentUserUsername: str = Depends(get_current_active_user),
+        providerName: ProviderName,
+        currentUserUsername: str = Depends(get_current_active_user),
 ):
     """Get specific provider information
 
@@ -122,9 +122,9 @@ async def get_provider_data(
 
 @router.put("/{providerName}")
 async def update_provider_data(
-    providerName: str,
-    req: UpdateProviderModel = Body(...),
-    currentUserUsername: str = Depends(get_current_active_user),
+        providerName: str,
+        req: UpdateProviderModel = Body(...),
+        currentUserUsername: str = Depends(get_current_active_user),
 ):
     """Update Provider Information (also update backend information from provider)
 
@@ -199,7 +199,7 @@ async def update_provider_data(
     "/{providerName}", response_description="Provider data deleted from the database"
 )
 async def delete_provider_data(
-    providerName: str, currentUserUsername: str = Depends(get_current_active_user)
+        providerName: str, currentUserUsername: str = Depends(get_current_active_user)
 ):
     """Delete Provider data
 

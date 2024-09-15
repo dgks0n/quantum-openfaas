@@ -1,9 +1,9 @@
-from bson.objectid import ObjectId
 from .dbConnect import dbClient
 
-dbProvider = dbClient.providers
+dbProvider = dbClient.qfaas
 
-provider_collection = dbProvider.get_collection("providers_collection")
+provider_collection = dbProvider.get_collection("providers")
+
 
 # Helper format
 def provider_helper(provider) -> dict:
@@ -14,6 +14,7 @@ def provider_helper(provider) -> dict:
         "additionalInfo": dict(provider["additionalInfo"]),
     }
 
+
 # CRUD operations
 # Retrieve all providers
 async def retrieve_providers(username: str):
@@ -21,6 +22,7 @@ async def retrieve_providers(username: str):
     async for provider in provider_collection.find({"username": username}):
         providers.append(provider_helper(provider))
     return providers
+
 
 # Add a new provider into to the database
 async def add_provider(provider_data: dict) -> dict:
@@ -34,6 +36,7 @@ async def retrieve_provider(username: str, providerName: str) -> dict:
     provider = await provider_collection.find_one({"username": username, 'providerName': providerName})
     if provider:
         return provider_helper(provider)
+
 
 # Update a provider with a matching ID
 async def update_provider(username: str, providerName: str, data: dict):

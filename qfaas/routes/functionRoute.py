@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Body, Depends, Request
-from fastapi.encoders import jsonable_encoder
-from sympy import re
-from qfaas.dependency.auth import get_current_active_user, get_current_user_token
-from qfaas.handlers.userHandler import get_role
-from qfaas.models.user import UserSchema
-from datetime import datetime
 
+from qfaas.database.dbFunction import (
+    add_function,
+    delete_function_db,
+    retrieve_function, retrieve_functions,
+)
+from qfaas.dependency.auth import get_current_active_user
 from qfaas.handlers.functionHandler import (
     create_function,
     get_functions,
@@ -20,28 +20,24 @@ from qfaas.handlers.functionHandler import (
     scale_function,
     get_status_function,
 )
-from qfaas.database.dbFunction import (
-    add_function,
-    delete_function_db,
-    retrieve_function,
-)
+from qfaas.handlers.userHandler import get_role
 from qfaas.models.function import (
     ErrorResponseModel,
-    ResponseModel,
     ResponseModel,
     FunctionSchema,
     UpdateFunctionModel,
     FunctionInvocationSchema,
     ScaleFunctionModel,
 )
+from qfaas.models.user import UserSchema
 
 router = APIRouter()
 
 
 @router.post("/", response_description="Function data added into the server")
 async def add_function_data(
-    function: FunctionSchema = Body(...),
-    currentUserUsername: UserSchema = Depends(get_current_active_user),
+        function: FunctionSchema = Body(...),
+        currentUserUsername: UserSchema = Depends(get_current_active_user),
 ):
     """Create new function and push to QFaaS
 
@@ -83,7 +79,7 @@ async def add_function_data(
 
 @router.get("/", response_description="Functions retrieved")
 async def get_all_functions(
-    currentUserUsername: str = Depends(get_current_active_user),
+        currentUserUsername: str = Depends(get_current_active_user),
 ):
     """Get list of all functions
 
@@ -120,7 +116,7 @@ async def get_all_functions(
 
 @router.get("/{name}", response_description="Function data retrieved")
 async def get_function_data(
-    name, currentUserUsername: str = Depends(get_current_active_user)
+        name, currentUserUsername: str = Depends(get_current_active_user)
 ):
     """Get detail information about a function
 
@@ -154,9 +150,9 @@ async def get_function_data(
 
 @router.put("/{name}")
 async def update_function_data(
-    name,
-    req: UpdateFunctionModel = Body(...),
-    currentUserUsername: str = Depends(get_current_active_user),
+        name,
+        req: UpdateFunctionModel = Body(...),
+        currentUserUsername: str = Depends(get_current_active_user),
 ):
     """Update function data
 
@@ -195,7 +191,7 @@ async def update_function_data(
 
 @router.delete("/{name}", response_description="Function data deleted")
 async def delete_function_route(
-    name: str, currentUserUsername: str = Depends(get_current_active_user)
+        name: str, currentUserUsername: str = Depends(get_current_active_user)
 ):
     """Delete a function
 
@@ -226,10 +222,10 @@ async def delete_function_route(
 # Invoke function route
 @router.post("/{name}", response_description="Invoke function")
 async def invoke_function_route(
-    name: str,
-    request: Request,
-    requestData: FunctionInvocationSchema = Body(...),
-    currentUserUsername=Depends(get_current_active_user),
+        name: str,
+        request: Request,
+        requestData: FunctionInvocationSchema = Body(...),
+        currentUserUsername=Depends(get_current_active_user),
 ):
     """Invoke a function from QFaaS
 
@@ -265,9 +261,9 @@ async def invoke_function_route(
 
 @router.post("/scale/{name}", response_description="Scale function")
 async def scale_function_route(
-    name: str,
-    req: ScaleFunctionModel = Body(...),
-    currentUserUsername: str = Depends(get_current_active_user),
+        name: str,
+        req: ScaleFunctionModel = Body(...),
+        currentUserUsername: str = Depends(get_current_active_user),
 ):
     dataDB = await retrieve_function(name)
     if dataDB is None:

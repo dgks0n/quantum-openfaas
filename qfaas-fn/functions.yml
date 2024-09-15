@@ -84,4 +84,3 @@ functions:
     lang: qiskit
     handler: ./qiskit-qiskit-qrng
     image: quantumdev/qiskit-qiskit-qrng:latest
-

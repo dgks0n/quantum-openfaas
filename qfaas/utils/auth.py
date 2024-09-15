@@ -1,9 +1,11 @@
 from datetime import datetime, timedelta
 from typing import Optional
-from passlib.context import CryptContext
+
 from jose import jwt
-from qfaas.models.user import UserSchema
+from passlib.context import CryptContext
+
 from qfaas.core.config import settings
+from qfaas.models.user import UserSchema
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

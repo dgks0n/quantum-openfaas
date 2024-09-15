@@ -1,10 +1,10 @@
-from bson.objectid import ObjectId
-from .dbConnect import dbClient
 from qfaas.utils.auth import get_password_hash, verify_password
+from .dbConnect import dbClient
 
-dbUser = dbClient.users
+dbUser = dbClient.qfaas
 
-user_collection = dbUser.get_collection("users_collection")
+user_collection = dbUser.get_collection("users")
+
 
 # Helper format
 
@@ -89,8 +89,8 @@ async def update_user(username: str, data: dict):
         if verifyPass is True:
             data.pop("currentPassword")
             if (
-                data["newPassword"] is not None
-                and data["newPasswordConfirm"] is not None
+                    data["newPassword"] is not None
+                    and data["newPasswordConfirm"] is not None
             ):
                 if data["newPassword"] != data["newPasswordConfirm"]:
                     return False

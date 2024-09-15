@@ -1,13 +1,12 @@
-import datetime
-from typing import Optional
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
-from qfaas.utils.auth import get_user
+
+from qfaas.core.config import settings
 from qfaas.database.dbUser import retrieve_users
 from qfaas.models.auth import TokenData
 from qfaas.models.user import UserSchema
-from qfaas.core.config import settings
+from qfaas.utils.auth import get_user
 
 # Customize OpenAPI
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
@@ -43,7 +42,7 @@ async def get_current_active_user(current_user: UserSchema = Depends(get_current
 
 
 async def get_current_user_token(
-    current_user: UserSchema = Depends(get_current_user),
+        current_user: UserSchema = Depends(get_current_user),
 ):
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive user")

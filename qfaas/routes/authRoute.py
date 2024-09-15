@@ -1,18 +1,15 @@
-from curses.ascii import isalnum
-from datetime import datetime, timedelta
-from turtle import update
-from typing import Optional
+import html
+from datetime import timedelta
 
 from fastapi import APIRouter, Body, Depends, HTTPException, status
+from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordRequestForm
-from fastapi.encoders import jsonable_encoder
-from qfaas.utils.auth import authenticate_user, create_access_token, check_existed_user
-from qfaas.models.auth import Token, SignUpResponseModel, ErrorSignUpResponseModel
+
 from qfaas.core.config import settings
+from qfaas.database.dbUser import add_user, retrieve_users, retrieve_user, update_user_token
+from qfaas.models.auth import Token, SignUpResponseModel, ErrorSignUpResponseModel
 from qfaas.models.user import UserSignUpModel
-from qfaas.database.dbUser import add_user, retrieve_users, update_user, retrieve_user, update_user_token
-from fastapi.encoders import jsonable_encoder
-import html
+from qfaas.utils.auth import authenticate_user, create_access_token, check_existed_user
 
 router = APIRouter()
 

@@ -1,37 +1,27 @@
-from cgitb import handler
 import os
-import json
-import subprocess
 import base64
-import requests
-from fastapi import Depends
-from requests.auth import HTTPBasicAuth
-from qfaas.core.config import settings
-from qfaas.handlers.userHandler import get_role
-from qfaas.dependency.auth import get_current_active_user, get_current_user_token
-from qfaas.utils.logger import logger
+import json
+import os
+import subprocess
 from datetime import datetime
+from platform import system
+
+import requests
+from fastapi.encoders import jsonable_encoder
+from requests.auth import HTTPBasicAuth
+
+from qfaas.core.config import settings
+from qfaas.database.dbFunction import (
+    retrieve_function,
+)
+from qfaas.database.dbJob import update_job, add_job
+from qfaas.handlers.userHandler import get_role
 from qfaas.models.function import (
     FunctionSchema,
     FunctionInvocationSchema,
     ScaleFunctionModel,
 )
-from fastapi.encoders import jsonable_encoder
-
 from qfaas.models.job import JobSchema
-from qfaas.database.dbFunction import (
-    add_function,
-    update_function_db,
-    delete_function_db,
-    retrieve_function,
-    retrieve_functions,
-)
-
-from qfaas.database.dbJob import update_job, add_job
-
-from qfaas.handlers.jobHandler import (
-    create_job,
-)
 
 
 def function_helper(function) -> dict:
@@ -73,7 +63,7 @@ def pull_function():
 
 
 def up_function(name):
-    cmd = 'echo "' + name + '" > build.txt'
+    cmd = 'echo "' + name + '" >> build.txt'
     detail, err = system_call(cmd)
     if err != 0:
         return detail, err
@@ -101,7 +91,6 @@ def up_function(name):
 
 
 def create_function(function_data: FunctionSchema):
-
     name = function_data.name
     template = function_data.template
     name = template + "-" + name
@@ -113,16 +102,18 @@ def create_function(function_data: FunctionSchema):
         return detail, err
 
     cmd = (
-        "faas-cli "
-        + "new "
-        + "--lang "
-        + template
-        + " "
-        + name
-        + " --append=./functions.yml "
-        + "--prefix="
-        + settings.DOCKER_REPOSITORY
+            "faas-cli "
+            + "new "
+            + "--lang "
+            + template
+            + " "
+            + name
+            + " --append=./functions.yml"
+            + " --prefix="
+            + settings.DOCKER_REPOSITORY
     )
+    print("** Current path: " + os.getcwd())
+    # Sample: faas-cli new --lang $1 $2 --append=./functions.yml --prefix="quantumdev"
     detail, err = system_call(cmd)
     if err != 0:
         return detail, err
@@ -152,11 +143,94 @@ def create_function(function_data: FunctionSchema):
 
 
 def get_functions():
-    url = settings.QFAAS_URL + "/system/functions"
-    response = requests.request(
-        "GET", url, auth=HTTPBasicAuth(settings.QFAAS_USER, settings.QFAAS_PASSWORD)
-    )
-    return json.loads(response.text)
+    # url = settings.QFAAS_URL + "/system/functions"
+    # response = requests.request(
+    #     "GET", url, auth=HTTPBasicAuth(settings.QFAAS_USER, settings.QFAAS_PASSWORD)
+    # )
+    # return json.loads(response.text)
+    functions = """
+    [
+        {
+            "name": "braket-qrng",
+            "image": "quantumdev/braket-qrng:latest",
+            "invocationCount": 1132,
+            "status": 1,
+            "author": "hoant",
+            "public": true,
+            "fnTemplate": "braket",
+            "replicas": 1,
+            "fnConfig": {
+                "secrets": []
+            }
+        },
+        {
+            "name": "qiskit-shor",
+            "image": "quantumdev/qiskit-shor:latest",
+            "invocationCount": 0,
+            "status": 1,
+            "author": "hoant",
+            "public": true,
+            "fnTemplate": "qiskit",
+            "replicas": 1,
+            "fnConfig": {
+                "secrets": []
+            }
+        },
+        {
+            "name": "qsharp-qrng",
+            "image": "quantumdev/qsharp-qrng:latest",
+            "invocationCount": 714,
+            "status": 1,
+            "author": "hoant",
+            "public": true,
+            "fnTemplate": "qsharp",
+            "replicas": 1,
+            "fnConfig": {
+                "secrets": []
+            }
+        },
+        {
+            "name": "qiskit-qrng",
+            "image": "quantumdev/qiskit-qrng:latest",
+            "invocationCount": 1773,
+            "status": 1,
+            "author": "hoant",
+            "public": true,
+            "fnTemplate": "qiskit",
+            "replicas": 1,
+            "fnConfig": {
+                "secrets": []
+            }
+        },
+        {
+            "name": "qiskit-grover",
+            "image": "quantumdev/qiskit-grover:latest",
+            "invocationCount": 5,
+            "status": 2,
+            "author": "hoant",
+            "public": true,
+            "fnTemplate": "qiskit",
+            "replicas": 2,
+            "fnConfig": {
+                "secrets": []
+            }
+        },
+        {
+            "name": "cirq-qrng",
+            "image": "quantumdev/cirq-qrng:latest",
+            "invocationCount": 180,
+            "status": 1,
+            "author": "hoant",
+            "public": true,
+            "fnTemplate": "cirq",
+            "replicas": 1,
+            "fnConfig": {
+                "secrets": []
+            }
+        }
+    ]
+    """
+    return json.loads(functions)
 
 
 def get_function(name) -> dict:
@@ -257,9 +331,9 @@ def delete_function(name):
         return None
 
     cmd = (
-        "awk -i inplace -v n=1 -v tag='"
-        + name
-        + ":' '/^  [^ ]/{n=1} /^  [^ ]/ && $1==tag {n=0} n' functions.yml"
+            "awk -i inplace -v n=1 -v tag='"
+            + name
+            + ":' '/^  [^ ]/{n=1} /^  [^ ]/ && $1==tag {n=0} n' functions.yml"
     )
     system_call(cmd)
 
@@ -286,15 +360,15 @@ def delete_function(name):
 
 # Invoke function handler
 async def invoke_function(
-    name: str, req: FunctionInvocationSchema, currentUserUsername: str, token: str
+        name: str, req: FunctionInvocationSchema, currentUserUsername: str, token: str
 ) -> dict:
     # TEMP - Get service API URL
     if req.local:
         # For local development - temporarily
-        url = settings.QFAAS_URL + "/function/" + name # https://qfaas.cloud/function/FNNAME
+        url = settings.QFAAS_URL + "/function/" + name  # https://qfaas.cloud/function/FNNAME
     else:
         # For production
-        url = "http://" + name + settings.QFAAS_FUNCTION_URL + "/" #FNNAME.openfaas-fn.svc.cluster.local:8080
+        url = "http://" + name + settings.QFAAS_FUNCTION_URL + "/"  # FNNAME.openfaas-fn.svc.cluster.local:8080
 
     # 1. Prepare the request data
     request = {k: v for k, v in req.dict().items() if v is not None}
@@ -359,7 +433,7 @@ async def check_function_permission_invoke(nameFunction, currentUserUsername) ->
     if roleCurrentUser == "admin":
         return True
     elif (
-        infoFunction["author"] == currentUserUsername or infoFunction["public"] == True
+            infoFunction["author"] == currentUserUsername or infoFunction["public"] == True
     ):
         return True
     else:
@@ -367,7 +441,6 @@ async def check_function_permission_invoke(nameFunction, currentUserUsername) ->
 
 
 def function_helper(function) -> dict:
-
     try:
         invocationCount = int(function["invocationCount"])
     except:
@@ -392,7 +465,6 @@ def function_helper(function) -> dict:
 
 
 def function_helper_get(function) -> dict:
-
     try:
         invocationCount = int(function["invocationCount"])
     except:

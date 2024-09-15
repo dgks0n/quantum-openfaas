@@ -76,6 +76,7 @@ class BackendRequestSchema(BaseModel):
     type: Optional[str]
     autoSelect: Optional[bool] = False
     backendName: Optional[str]
+
     # extraInfo: Optional[dict]
 
     class Config:

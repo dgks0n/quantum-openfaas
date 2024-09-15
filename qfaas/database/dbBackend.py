@@ -1,10 +1,11 @@
 from bson.objectid import ObjectId
+
 from .dbConnect import dbClient
-from qfaas.utils.logger import logger
 
-dbBackend = dbClient.backends
+dbBackend = dbClient.qfaas
 
-backend_collection = dbBackend.get_collection("backends_collection")
+backend_collection = dbBackend.get_collection("backends")
+
 
 # Helper format
 def backend_helper(backend) -> dict:
@@ -23,11 +24,11 @@ def backend_helper(backend) -> dict:
 
 # CRUD operations
 async def get_backends_from_db(
-    user: str,
-    provider: str = "",
-    name: str = "",
-    sdk: str = "",
-    bkType: str = "",
+        user: str,
+        provider: str = "",
+        name: str = "",
+        sdk: str = "",
+        bkType: str = "",
 ):
     if user:
         query = {"user": user}

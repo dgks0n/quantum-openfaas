@@ -1,12 +1,10 @@
-from datetime import datetime, time, timedelta
-from dateutil import parser
 from bson.objectid import ObjectId
+
 from .dbConnect import dbClient
-from qfaas.utils.logger import logger
 
+dbJob = dbClient.qfaas
+job_collection = dbJob.get_collection("jobs")
 
-dbJob = dbClient.jobs
-job_collection = dbJob.get_collection("jobs_collection")
 
 # Helper format
 def job_helper(job) -> dict:

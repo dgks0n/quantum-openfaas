@@ -1,19 +1,16 @@
-from qfaas.utils.logger import logger
-from fastapi.openapi.utils import get_openapi
-from qfaas.routes.functionRoute import router as FunctionRouter
-from qfaas.dependency.auth import get_current_active_user
-from qfaas.routes.authRoute import router as AuthRouter
-from qfaas.routes.userRoute import router as UserRouter
-from functools import lru_cache
-from fastapi import Depends, FastAPI, Request
-
-from qfaas.routes.providerRoute import router as ProviderRouter
-from qfaas.routes.backendRoute import router as BackendRouter
-from qfaas.routes.jobRoute import router as JobRouter
-
+from fastapi import Depends, FastAPI
 # CORs
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.openapi.utils import get_openapi
 
+from qfaas.dependency.auth import get_current_active_user
+from qfaas.routes.authRoute import router as AuthRouter
+from qfaas.routes.backendRoute import router as BackendRouter
+from qfaas.routes.functionRoute import router as FunctionRouter
+from qfaas.routes.jobRoute import router as JobRouter
+from qfaas.routes.providerRoute import router as ProviderRouter
+from qfaas.routes.userRoute import router as UserRouter
+from qfaas.utils.logger import logger
 
 # Import logger
 

@@ -1,6 +1,8 @@
+from datetime import datetime
+
 from fastapi import APIRouter, Body, Depends, Request
 from fastapi.encoders import jsonable_encoder
-from datetime import datetime
+
 from qfaas.database.dbJob import (
     add_job,
     update_job,
@@ -11,6 +13,10 @@ from qfaas.database.dbJob import (
     retrieve_jobs_by_username,
     retrieve_jobs_by_multiple_criteria,
 )
+from qfaas.database.dbUser import retrieve_user
+from qfaas.dependency.auth import get_current_active_user
+from qfaas.handlers.functionHandler import invoke_function
+from qfaas.models.function import FunctionInvocationSchema
 from qfaas.models.job import (
     ErrorResponseModel,
     ResponseModel,
@@ -18,14 +24,8 @@ from qfaas.models.job import (
     UpdateJobModel,
     FilterJobModel,
 )
-
-from qfaas.handlers.functionHandler import invoke_function
-from qfaas.providers.ibmq import check_job_result
-from qfaas.dependency.auth import get_current_active_user
-
 from qfaas.models.user import UserSchema
-from qfaas.models.function import FunctionInvocationSchema
-from qfaas.database.dbUser import retrieve_user
+from qfaas.providers.ibmq import check_job_result
 
 router = APIRouter()
 
@@ -48,7 +48,7 @@ async def get_jobs():
 # Get job by Job ID
 @router.get("/{id}", response_description="Job data retrieved")
 async def get_job_data(
-    id, request: Request, current_user: UserSchema = Depends(get_current_active_user)
+        id, request: Request, current_user: UserSchema = Depends(get_current_active_user)
 ):
     job = await retrieve_job(id)
     if job:
@@ -95,7 +95,7 @@ async def get_job_data(
 # Get jobs list by username (owner)
 @router.get("/owner/{username}", response_description="Job data retrieved")
 async def get_jobs_by_owner(
-    username, current_user: UserSchema = Depends(get_current_active_user)
+        username, current_user: UserSchema = Depends(get_current_active_user)
 ):
     currentUser = await retrieve_user(current_user)
     if currentUser.get("role") == "admin":
@@ -152,7 +152,7 @@ async def delete_job_data(id: str):
     "/owner/{username}", response_description="Job data deleted from the database"
 )
 async def delete_job_data_by_owner(
-    username: str, current_user: UserSchema = Depends(get_current_active_user)
+        username: str, current_user: UserSchema = Depends(get_current_active_user)
 ):
     """Delete multiple jobs by the given username (for Administrator only)
 

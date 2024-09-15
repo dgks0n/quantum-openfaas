@@ -1,16 +1,16 @@
 from fastapi import APIRouter, Body, Depends
-from qfaas.dependency.auth import get_current_active_user
-from qfaas.handlers.userHandler import get_role
+
 from qfaas.database.dbUser import (
     update_user,
     delete_user,
     retrieve_user,
     retrieve_users_min,
 )
+from qfaas.dependency.auth import get_current_active_user
+from qfaas.handlers.userHandler import get_role
 from qfaas.models.user import (
     ErrorResponseModel,
     ResponseModel,
-    UserSchema,
     UpdateUserModel,
 )
 
@@ -52,8 +52,8 @@ async def get_user_data(currentUserUsername: str = Depends(get_current_active_us
 
 @router.put("/")
 async def update_user_data(
-    req: UpdateUserModel = Body(...),
-    currentUserUsername: str = Depends(get_current_active_user),
+        req: UpdateUserModel = Body(...),
+        currentUserUsername: str = Depends(get_current_active_user),
 ):
     """Update user information (display name)
 
@@ -79,7 +79,7 @@ async def update_user_data(
 
 @router.delete("/", response_description="User data deleted from the database")
 async def delete_user_by_username(
-    username: str, currentUserUsername: str = Depends(get_current_active_user)
+        username: str, currentUserUsername: str = Depends(get_current_active_user)
 ):
     """Delete user by username (for Administrator only)
 

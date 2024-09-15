@@ -1,14 +1,14 @@
-from qiskit import IBMQ
-from qiskit.providers.ibmq.managed import IBMQJobManager
-from qiskit.providers.ibmq import least_busy
-from qfaas.utils.logger import logger
-from qfaas.models.backend import IBMQBackendSchema
-from qfaas.database.dbProvider import retrieve_provider
-from datetime import datetime
-from qfaas.models.job import JobSchema
-from qfaas.models.backend import BackendRequestSchema
-from qfaas.database.dbBackend import get_backends_from_db
 import time
+from datetime import datetime
+
+from qiskit import IBMQ
+from qiskit.providers.ibmq import least_busy
+
+from qfaas.database.dbBackend import get_backends_from_db
+from qfaas.database.dbProvider import retrieve_provider
+from qfaas.models.backend import BackendRequestSchema
+from qfaas.models.backend import IBMQBackendSchema
+from qfaas.utils.logger import logger
 
 
 def initialize_IBMQProvider(ibmqToken: str, hub: str = "ibm-q"):
@@ -74,7 +74,7 @@ async def get_ibmq_default_hub(user: str):
 
 # Pre-filter the approriate IBMQ Backend from the database
 async def pre_select_ibmq_backend(
-    currentUser: str, beReq: BackendRequestSchema, hub: str
+        currentUser: str, beReq: BackendRequestSchema, hub: str
 ):
     # Check if that backend exists or not
     backends = await get_backends_from_db(user=currentUser, provider="ibmq")
@@ -82,9 +82,9 @@ async def pre_select_ibmq_backend(
     for bk in backends:
         if beReq.type:
             if (
-                int(bk["qubit"]) >= beReq.rQubit
-                and bk["type"] == beReq.type
-                and bk["backendInfo"]["hub"] == hub
+                    int(bk["qubit"]) >= beReq.rQubit
+                    and bk["type"] == beReq.type
+                    and bk["backendInfo"]["hub"] == hub
             ):
                 backend.append(bk["name"])
         else:

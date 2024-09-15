@@ -43,7 +43,7 @@ class UpdateUserModel(BaseModel):
                 "displayName": "QFaaS New name",
                 "currentPassword": "",
                 "newPassword": "",
-                "newPasswordConfirm":"",
+                "newPasswordConfirm": "",
             }
         }
 

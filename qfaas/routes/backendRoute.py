@@ -1,7 +1,7 @@
+from enum import Enum
+
 from fastapi import APIRouter, Body, Depends
 from fastapi.encoders import jsonable_encoder
-from qfaas.utils.logger import logger
-from enum import Enum
 
 from qfaas.database.dbBackend import (
     add_backend,
@@ -10,9 +10,11 @@ from qfaas.database.dbBackend import (
     delete_backend,
     delete_many_backends,
     retrieve_backend,
-    retrieve_backend_by_name,
     get_backends_from_db,
 )
+from qfaas.database.dbUser import retrieve_user
+from qfaas.dependency.auth import get_current_active_user
+from qfaas.handlers.backendHandler import select_backend
 from qfaas.models.backend import (
     ErrorResponseModel,
     ResponseModel,
@@ -20,16 +22,12 @@ from qfaas.models.backend import (
     UpdateBackendModel,
     BackendRequestSchema,
 )
-from qfaas.models.user import UserSchema
-from qfaas.database.dbUser import retrieve_user
-
+from qfaas.providers.braketsw import get_braketsw_backends
 # Get IBMQ Backends
 from qfaas.providers.ibmq import get_ibmq_backends, get_ibmq_default_hub
-from qfaas.providers.braketsw import get_braketsw_backends
-from qfaas.dependency.auth import get_current_active_user
-from qfaas.handlers.backendHandler import select_backend
 
 router = APIRouter()
+
 
 # Add new internal backend to database (external backend will be queried directly from external provider)
 class ProviderName(str, Enum):
@@ -42,7 +40,7 @@ class ProviderName(str, Enum):
 # Backend Selection route
 @router.post("/select", response_description="Backend Selection completed")
 async def backend_selection_route(
-    beReq: BackendRequestSchema, currentUsername: str = Depends(get_current_active_user)
+        beReq: BackendRequestSchema, currentUsername: str = Depends(get_current_active_user)
 ):
     """Verify and select an approriate backend based on user request
 
@@ -92,7 +90,7 @@ async def add_backend_data(backend: BackendSchema = Body(...)):
 # Get all backends
 @router.get("/", response_description="Backends retrieved")
 async def get_backends(
-    provider: ProviderName, currentUsername: str = Depends(get_current_active_user)
+        provider: ProviderName, currentUsername: str = Depends(get_current_active_user)
 ) -> list:
     """Get backends list from local Database. (To retrieve updated information from external provider, use the **fetch()** method)
 
@@ -132,7 +130,7 @@ async def get_backends(
     "/fetch", response_description="Fetch backend information from Quantum Provider"
 )
 async def fetch_backend(
-    provider: ProviderName, currentUsername: str = Depends(get_current_active_user)
+        provider: ProviderName, currentUsername: str = Depends(get_current_active_user)
 ) -> list:
     """
     Fetch new backend information from Quantum Providers and synchonize with local database.

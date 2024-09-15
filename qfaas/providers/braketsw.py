@@ -1,9 +1,5 @@
 # import strangeworks
 # from strangeworks.braket import get_backends, run_circuit, get_circuit_results
-from qfaas.database.dbProvider import retrieve_provider
-from qfaas.utils.logger import logger
-from qfaas.models.backend import BraketSWBackendSchema
-from datetime import datetime
 
 braketBackends = [
     {
@@ -11,7 +7,9 @@ braketBackends = [
         "type": "qpu",
         "vendor": "Rigetti",
         "qubit": 38,
-        "supported_gates": ['cz', 'xy', 'ccnot', 'cnot', 'cphaseshift', 'cphaseshift00', 'cphaseshift01', 'cphaseshift10', 'cswap', 'h', 'i', 'iswap', 'phaseshift', 'pswap', 'rx', 'ry', 'rz', 's', 'si', 'swap', 't', 'ti', 'x', 'y', 'z'],
+        "supported_gates": ['cz', 'xy', 'ccnot', 'cnot', 'cphaseshift', 'cphaseshift00', 'cphaseshift01',
+                            'cphaseshift10', 'cswap', 'h', 'i', 'iswap', 'phaseshift', 'pswap', 'rx', 'ry', 'rz', 's',
+                            'si', 'swap', 't', 'ti', 'x', 'y', 'z'],
         "region": "us-west-1",
         "status": True,
     },
@@ -20,16 +18,20 @@ braketBackends = [
         "type": "qpu",
         "vendor": "Rigetti",
         "qubit": 80,
-        "supported_gates": ['cz', 'xy', 'ccnot', 'cnot', 'cphaseshift', 'cphaseshift00', 'cphaseshift01', 'cphaseshift10', 'cswap', 'h', 'i', 'iswap', 'phaseshift', 'pswap', 'rx', 'ry', 'rz', 's', 'si', 'swap', 't', 'ti', 'x', 'y', 'z'],
+        "supported_gates": ['cz', 'xy', 'ccnot', 'cnot', 'cphaseshift', 'cphaseshift00', 'cphaseshift01',
+                            'cphaseshift10', 'cswap', 'h', 'i', 'iswap', 'phaseshift', 'pswap', 'rx', 'ry', 'rz', 's',
+                            'si', 'swap', 't', 'ti', 'x', 'y', 'z'],
         "region": "us-west-1",
         "status": False,
     },
-        {
+    {
         "name": "aws.Aspen-M-2",
         "type": "qpu",
         "vendor": "Rigetti",
         "qubit": 80,
-        "supported_gates": ['cz', 'xy', 'ccnot', 'cnot', 'cphaseshift', 'cphaseshift00', 'cphaseshift01', 'cphaseshift10', 'cswap', 'h', 'i', 'iswap', 'phaseshift', 'pswap', 'rx', 'ry', 'rz', 's', 'si', 'swap', 't', 'ti', 'x', 'y', 'z'],
+        "supported_gates": ['cz', 'xy', 'ccnot', 'cnot', 'cphaseshift', 'cphaseshift00', 'cphaseshift01',
+                            'cphaseshift10', 'cswap', 'h', 'i', 'iswap', 'phaseshift', 'pswap', 'rx', 'ry', 'rz', 's',
+                            'si', 'swap', 't', 'ti', 'x', 'y', 'z'],
         "region": "us-west-1",
         "status": False,
     },
@@ -38,7 +40,8 @@ braketBackends = [
         "type": "qpu",
         "vendor": "IonQ",
         "qubit": 11,
-        "supported_gates": ['x', 'y', 'z', 'rx', 'ry', 'rz', 'h', 'cnot', 's', 'si', 't', 'ti', 'v', 'vi', 'xx', 'yy', 'zz', 'swap', 'i'],
+        "supported_gates": ['x', 'y', 'z', 'rx', 'ry', 'rz', 'h', 'cnot', 's', 'si', 't', 'ti', 'v', 'vi', 'xx', 'yy',
+                            'zz', 'swap', 'i'],
         "region": "us-east-1",
         "status": True,
     },
@@ -47,7 +50,8 @@ braketBackends = [
         "type": "qpu",
         "vendor": "Oxford Quantum Circuits (OQC)",
         "qubit": 8,
-        "supported_gates": ['ccnot', 'cnot', 'cphaseshift', 'cswap', 'cy', 'cz', 'h', 'i', 'phaseshift', 'rx', 'ry', 'rz', 's', 'si', 'swap', 't', 'ti', 'v', 'vi', 'x', 'y', 'z', 'ecr'],
+        "supported_gates": ['ccnot', 'cnot', 'cphaseshift', 'cswap', 'cy', 'cz', 'h', 'i', 'phaseshift', 'rx', 'ry',
+                            'rz', 's', 'si', 'swap', 't', 'ti', 'v', 'vi', 'x', 'y', 'z', 'ecr'],
         "region": "eu-west-2",
         "status": True,
     },
@@ -71,6 +75,7 @@ braketBackends = [
     }
 ]
 
+
 def initialize_SWProvider(swUser, providerToken):
     # try:
     #     logger.info("Authenticate Strangeworks account with username: " + str(swUser))
@@ -79,6 +84,7 @@ def initialize_SWProvider(swUser, providerToken):
     #     logger.warning(ex)
     #     return False
     pass
+
 
 async def get_braketsw_backends(user) -> list:
     # backendList = []
@@ -111,5 +117,3 @@ async def get_braketsw_backends(user) -> list:
     #             )
     # return backendList
     pass
-    
-    

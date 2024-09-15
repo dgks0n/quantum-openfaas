@@ -126,6 +126,7 @@ celerybeat.pid
 
 # Environments
 .env
+.env.example
 .venv
 env/
 venv/
@@ -159,3 +160,4 @@ cython_debug/
 
 # End of https://mrkandreev.name/snippets/gitignore-generator/#react,Python
 
+mongodb/db

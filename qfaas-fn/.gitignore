@@ -1,2 +1,5 @@
 build
 *.secret
+
+template
+.secrets

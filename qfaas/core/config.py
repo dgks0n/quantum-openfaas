@@ -1,9 +1,9 @@
-from pydantic import BaseSettings
 from decouple import config
+from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440 # 1 day
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440  # 1 day
     SECRET_KEY: str = ""
     ALGORITHM: str = "HS256"
     GIT_BRANCH: str = config("GIT_BRANCH")

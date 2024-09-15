@@ -1,9 +1,11 @@
 from bson.objectid import ObjectId
+
 from .dbConnect import dbClient
 
-dbFunction = dbClient.functions
+dbFunction = dbClient.qfaas
 
-function_collection = dbFunction.get_collection("functions_collection")
+function_collection = dbFunction.get_collection("functions")
+
 
 # Helper format
 def function_helper(function) -> dict:

@@ -1,13 +1,13 @@
-from qfaas.utils.logger import logger
-from qfaas.models.backend import BackendRequestSchema, BackendResponseSchema
 from qfaas.database.dbBackend import get_backends_from_db
 from qfaas.database.dbProvider import retrieve_provider
+from qfaas.database.dbUser import retrieve_user_token
+from qfaas.models.backend import BackendRequestSchema, BackendResponseSchema
 from qfaas.providers.ibmq import (
     get_least_busy_backend,
     pre_select_ibmq_backend,
     get_ibmq_default_hub,
 )
-from qfaas.database.dbUser import retrieve_user_token
+
 
 # Get provider token
 async def get_provider_token(user: str, provider: str):
@@ -82,7 +82,7 @@ async def select_ibmq_backend(beReq: BackendRequestSchema, currentUser: str):
 
 async def select_braketsw_backend(beReq: BackendRequestSchema, currentUser: str):
     # Temp: select the backend from local database
-    # TODO: Retrive the job queue from all backends to select least busy backend (when Strangeworks supports)
+    # TODO: Retrieve the job queue from all backends to select least busy backend (when Strangeworks supports)
     if beReq.autoSelect:
         beReq.backendName = ""
     beRes = await select_internal_backend(beReq, currentUser)
