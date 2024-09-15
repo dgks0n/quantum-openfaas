@@ -95,3 +95,8 @@ functions:
     handler: ./qiskit-sample
     image: quantumdev/qiskit-sample:latest
 
+  cirq-sample:
+    lang: cirq
+    handler: ./cirq-sample
+    image: quantumdev/cirq-sample:latest
+
