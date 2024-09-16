@@ -99,3 +99,8 @@ functions:
     handler: ./qiskit-shor-v5
     image: quantumdev/qiskit-shor-v5:latest
 
+  qiskit-shor-v6:
+    lang: qiskit
+    handler: ./qiskit-shor-v6
+    image: quantumdev/qiskit-shor-v6:latest
+
