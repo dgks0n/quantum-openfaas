@@ -1,10 +1,8 @@
-import os
 import base64
 import json
 import os
 import subprocess
 from datetime import datetime
-from platform import system
 
 import requests
 from fastapi.encoders import jsonable_encoder
@@ -83,6 +81,7 @@ def up_function(name):
     if err != 0:
         return detail, err
 
+    # TODO: Temporary disable pushing to Git
     cmd = "git push origin " + settings.GIT_BRANCH
     detail, err = system_call(cmd)
     if err != 0:
@@ -112,7 +111,6 @@ def create_function(function_data: FunctionSchema):
             + " --prefix="
             + settings.DOCKER_REPOSITORY
     )
-    print("** Current path: " + os.getcwd())
     # Sample: faas-cli new --lang $1 $2 --append=./functions.yml --prefix="quantumdev"
     detail, err = system_call(cmd)
     if err != 0:
@@ -143,94 +141,11 @@ def create_function(function_data: FunctionSchema):
 
 
 def get_functions():
-    # url = settings.QFAAS_URL + "/system/functions"
-    # response = requests.request(
-    #     "GET", url, auth=HTTPBasicAuth(settings.QFAAS_USER, settings.QFAAS_PASSWORD)
-    # )
-    # return json.loads(response.text)
-    functions = """
-    [
-        {
-            "name": "braket-qrng",
-            "image": "quantumdev/braket-qrng:latest",
-            "invocationCount": 1132,
-            "status": 1,
-            "author": "hoant",
-            "public": true,
-            "fnTemplate": "braket",
-            "replicas": 1,
-            "fnConfig": {
-                "secrets": []
-            }
-        },
-        {
-            "name": "qiskit-shor",
-            "image": "quantumdev/qiskit-shor:latest",
-            "invocationCount": 0,
-            "status": 1,
-            "author": "hoant",
-            "public": true,
-            "fnTemplate": "qiskit",
-            "replicas": 1,
-            "fnConfig": {
-                "secrets": []
-            }
-        },
-        {
-            "name": "qsharp-qrng",
-            "image": "quantumdev/qsharp-qrng:latest",
-            "invocationCount": 714,
-            "status": 1,
-            "author": "hoant",
-            "public": true,
-            "fnTemplate": "qsharp",
-            "replicas": 1,
-            "fnConfig": {
-                "secrets": []
-            }
-        },
-        {
-            "name": "qiskit-qrng",
-            "image": "quantumdev/qiskit-qrng:latest",
-            "invocationCount": 1773,
-            "status": 1,
-            "author": "hoant",
-            "public": true,
-            "fnTemplate": "qiskit",
-            "replicas": 1,
-            "fnConfig": {
-                "secrets": []
-            }
-        },
-        {
-            "name": "qiskit-grover",
-            "image": "quantumdev/qiskit-grover:latest",
-            "invocationCount": 5,
-            "status": 2,
-            "author": "hoant",
-            "public": true,
-            "fnTemplate": "qiskit",
-            "replicas": 2,
-            "fnConfig": {
-                "secrets": []
-            }
-        },
-        {
-            "name": "cirq-qrng",
-            "image": "quantumdev/cirq-qrng:latest",
-            "invocationCount": 180,
-            "status": 1,
-            "author": "hoant",
-            "public": true,
-            "fnTemplate": "cirq",
-            "replicas": 1,
-            "fnConfig": {
-                "secrets": []
-            }
-        }
-    ]
-    """
-    return json.loads(functions)
+    url = settings.QFAAS_URL + "/system/functions"
+    response = requests.request(
+        "GET", url, auth=HTTPBasicAuth(settings.QFAAS_USER, settings.QFAAS_PASSWORD)
+    )
+    return json.loads(response.text)
 
 
 def get_function(name) -> dict:
