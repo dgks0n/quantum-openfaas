@@ -1,2 +1,3 @@
 qiskit-sample
 cirq-sample
+qiskit-shor-v2

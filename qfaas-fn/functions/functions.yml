@@ -84,19 +84,8 @@ functions:
     lang: qiskit
     handler: ./qiskit-qiskit-qrng
     image: quantumdev/qiskit-qiskit-qrng:latest
-
-  qiskit-grover:
+  qiskit-shor-v2:
     lang: qiskit
-    handler: ./qiskit-grover
-    image: quantumdev/qiskit-grover:latest
-
-  qiskit-sample:
-    lang: qiskit
-    handler: ./qiskit-sample
-    image: quantumdev/qiskit-sample:latest
-
-  cirq-sample:
-    lang: cirq
-    handler: ./cirq-sample
-    image: quantumdev/cirq-sample:latest
+    handler: ./qiskit-shor-v2
+    image: quantumdev/qiskit-shor-v2:latest
 
